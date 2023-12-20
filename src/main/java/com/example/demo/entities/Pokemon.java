@@ -32,4 +32,13 @@ public class Pokemon {
     @ManyToOne
     @JoinColumn(name = "entrenador_id")
     private Entrenador entrenador;
+
+	public Entrenador getEntrenador() {
+		return entrenador;
+	}
+
+	public void setEntrenador(Entrenador entrenador) {
+		this.entrenador = entrenador;
+	}
+    
 }

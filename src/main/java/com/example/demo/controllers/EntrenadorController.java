@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,8 @@ import com.example.demo.repositories.EntrenadorRepository;
 public class EntrenadorController {
     @Autowired
     private EntrenadorRepository entrenadorRepository;
+    @Autowired
+    private PokemonRepository pokemonRepository;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> requestBody) {
@@ -52,5 +55,32 @@ public class EntrenadorController {
             return ResponseEntity.notFound().build();
         }
     }
-}
+    @PostMapping("/{entrenadorUuid}/pokemons/{pokemonUuid}")
+    public ResponseEntity<?> agregarPokemonAEntrenador(
+            @PathVariable String entrenadorUuid,
+            @PathVariable String pokemonUuid) {
+
+        Optional<Entrenador> entrenadorOptional = entrenadorRepository.findByUuid(entrenadorUuid);
+        Optional<Pokemon> pokemonOptional = pokemonRepository.findByUuid(pokemonUuid);
+
+        if (entrenadorOptional.isPresent() && pokemonOptional.isPresent()) {
+            Entrenador entrenador = entrenadorOptional.get();
+            Pokemon pokemon = pokemonOptional.get();
+
+            if (pokemon.getEntrenador() != null) {
+             
+                return ResponseEntity.ok(Map.of("error", true, "message", "El Pokémon ya está registrado a un entrenador."));
+            }
+
+          
+            pokemon.setEntrenador(entrenador);
+            pokemonRepository.save(pokemon);
+
+      
+            List<Pokemon> pokemonesActualizados = entrenador.getPokemones();
+            return ResponseEntity.ok(pokemonesActualizados);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
