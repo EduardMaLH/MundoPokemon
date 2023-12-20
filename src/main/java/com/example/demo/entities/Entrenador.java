@@ -1,8 +1,12 @@
 package com.example.demo.entities;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Data
@@ -21,4 +25,7 @@ public class Entrenador {
 	
 	@Column(nullable=false, length=50)
 	private String uuid;
+	
+	 @OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL)
+	    private List<Pokemon> pokemones;
 }
