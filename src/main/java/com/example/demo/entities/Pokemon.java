@@ -29,5 +29,7 @@ public class Pokemon {
     @JoinColumn(name = "tipo_pokemon_id")
     private TipoPokemon tipoPokemon;
 
-   
+    @ManyToOne
+    @JoinColumn(name = "entrenador_id")
+    private Entrenador entrenador;
 }
