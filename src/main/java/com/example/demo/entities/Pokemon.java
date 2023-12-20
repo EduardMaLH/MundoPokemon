@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Pokemon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String nombre;
     private String descripcion;
